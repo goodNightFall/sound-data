@@ -1,37 +1,37 @@
 {
-    "name": "sound-data",
-    "version": "1.0.0",
-    "description": "sound-data service for music app",
-    "main": "./src/index.js",
-    "type": "commonjs",
-    "scripts": {
-        "prepare": "husky",
-        "lint": "eslint --ext .js src",
-        "dev": "nodemon ./src/index.js",
-        "start": "node ./src/index.js"
-    },
-    "keywords": [
-        "sound",
-        "music"
-    ],
-    "author": {
-        "name": "Denis Savin",
-        "email": "denissav203@gmail.com",
-        "url": "http://github.com/goodNightFall"
-    },
-    "license": "ISC",
-    "dependencies": {
-        "cors": "^2.8.5",
-        "dotenv": "^16.4.5",
-        "express": "^4.19.2",
-        "pg": "^8.11.5",
-        "pg-hstore": "^2.3.4",
-        "sequelize": "^6.37.2"
-    },
-    "devDependencies": {
-        "eslint": "^8.57.0",
-        "eslint-plugin-unused-imports": "^3.1.0",
-        "husky": "^9.0.11",
-        "nodemon": "^3.1.0"
-    }
+  "name": "sound-data",
+  "version": "1.0.0",
+  "description": "sound-data service for music app",
+  "main": "./src/index.js",
+  "type": "commonjs",
+  "scripts": {
+    "prepare": "husky",
+    "lint": "eslint --ext .js src",
+    "dev": "nodemon ./src/index.js",
+    "start": "node ./src/index.js"
+  },
+  "keywords": [
+    "sound",
+    "music"
+  ],
+  "author": {
+    "name": "Denis Savin",
+    "email": "denissav203@gmail.com",
+    "url": "http://github.com/goodNightFall"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "pg": "^8.11.5",
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^6.37.2"
+  },
+  "devDependencies": {
+    "eslint": "^8.57.0",
+    "eslint-plugin-unused-imports": "^3.1.0",
+    "husky": "^9.0.11",
+    "nodemon": "^3.1.0"
+  }
 }
