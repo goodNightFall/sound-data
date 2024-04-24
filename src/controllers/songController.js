@@ -34,6 +34,10 @@ class SongController {
         attributes: ["id", "album_id", "name", "audio", "img"]
       })
 
+      if (!song) {
+        return res.json(ApiError.notFound("There is no song with this id"))
+      }
+
       const data = {
         data: song
       }

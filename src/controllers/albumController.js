@@ -39,6 +39,10 @@ class AlbumController {
         }]
       })
 
+      if (!album) {
+        return res.json(ApiError.notFound("There is no album with this id"))
+      }
+
       const data = {
         data: album
       }

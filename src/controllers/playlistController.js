@@ -56,6 +56,10 @@ class PlaylistController {
         }]
       })
 
+      if (!playlist) {
+        return res.json(ApiError.notFound("There is no playlist with this id"))
+      }
+
       const data = {
         data: {
           id: playlist.id,
