@@ -93,7 +93,9 @@ class PlaylistController {
       const { name, user_id, img, songs } = req.body
       const playlist = await Playlist.create({ name, user_id, img })
 
-      await Promise.all(songs.map(async song_id => await playlist.addSong(await Song.findByPk(song_id))))
+      if (songs && Array.isArray(songs)) {
+        await Promise.all(songs.map(async song_id => await playlist.addSong(await Song.findByPk(song_id))))
+      }
 
       const newPlaylist = await Playlist.findOne({
         where: { id: playlist.id },

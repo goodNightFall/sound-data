@@ -61,9 +61,11 @@ class AlbumController {
       const { name, img, songs } = req.body
       const album = await Album.create({ name, img })
 
-      await Promise.all(songs.map(async song_id =>
-        await Song.update({ album_id: album.id },
+      if (songs && Array.isArray(songs)) {
+        await Promise.all(songs.map(async song_id => await Song.update(
+          { album_id: album.id },
           { where: { id: song_id, album_id: null } })))
+      }
 
       album.songs = await Song.findAll({
         where: { album_id: album.id },
