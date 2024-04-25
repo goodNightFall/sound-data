@@ -40,7 +40,7 @@ class PlaylistController {
     } catch (err) {
       nodeLogger.error(err)
       const error = errorDetection(err)
-      error ? res.json(error) : res.json(ApiError.internal("Couldn't get playlists"))
+      error ? res.status(error.code).json(error.message) : res.status(500).json(ApiError.internal("Couldn't get playlists"))
     }
   }
 
@@ -57,7 +57,7 @@ class PlaylistController {
       })
 
       if (!playlist) {
-        return res.json(ApiError.notFound("There is no playlist with this id"))
+        return res.status(404).json(ApiError.notFound("There is no playlist with this id"))
       }
 
       const data = {
@@ -83,7 +83,7 @@ class PlaylistController {
     } catch (err) {
       nodeLogger.error(err)
       const error = errorDetection(err)
-      error ? res.json(error) : res.json(ApiError.internal("Couldn't get playlist"))
+      error ? res.status(error.code).json(error.message) : res.status(500).json(ApiError.internal("Couldn't get playlist"))
     }
   }
 
@@ -91,7 +91,7 @@ class PlaylistController {
     try {
       const inValidFields = incorrectFields(req.body, ["name", "user_id", "img", "songs"])
       if (inValidFields.length) {
-        return res.json(ApiError.badRequest(`Field's ${inValidFields.join(", ")} is not allowed`))
+        return res.status(400).json(ApiError.badRequest(`Field's ${inValidFields.join(", ")} is not allowed`))
       }
 
       const { name, user_id, img, songs } = req.body
@@ -133,7 +133,7 @@ class PlaylistController {
     } catch (err) {
       nodeLogger.error(err)
       const error = errorDetection(err)
-      error ? res.json(error) : res.json(ApiError.internal("Couldn't create playlist"))
+      error ? res.status(error.code).json(error.message) : res.status(500).json(ApiError.internal("Couldn't create playlist"))
     }
   }
 
@@ -180,7 +180,7 @@ class PlaylistController {
     } catch (err) {
       nodeLogger.error(err)
       const error = errorDetection(err)
-      error ? res.json(error) : res.json(ApiError.internal("Couldn't update album"))
+      error ? res.status(error.code).json(error.message) : res.status(500).json(ApiError.internal("Couldn't update album"))
     }
   }
 
@@ -191,14 +191,14 @@ class PlaylistController {
       const isDeleted = await Playlist.destroy({ where: { id } })
 
       if (!isDeleted) {
-        return res.json(ApiError.notFound("There is no album with this id"))
+        return res.status(404).json(ApiError.notFound("There is no album with this id"))
       }
 
       return res.json({ data: {} })
     } catch (err) {
       nodeLogger.error(err)
       const error = errorDetection(err)
-      error ? res.json(error) : res.json(ApiError.internal("Couldn't delete album"))
+      error ? res.status(error.code).json(error.message) : res.status(500).json(ApiError.internal("Couldn't delete album"))
     }
   }
 
@@ -206,13 +206,13 @@ class PlaylistController {
     try {
       const inValidFields = incorrectFields(req.body, ["song_id"])
       if (inValidFields.length) {
-        return res.json(ApiError.badRequest(`Field's ${inValidFields.join(", ")} is not allowed`))
+        return res.status(400).json(ApiError.badRequest(`Field's ${inValidFields.join(", ")} is not allowed`))
       }
 
       const { id } = req.params
       const { song_id } = req.body
 
-      const playlist = await Playlist.findByPk(id) || res.json(ApiError.badRequest("There is no playlist with this id"))
+      const playlist = await Playlist.findByPk(id) || res.status(404).json(ApiError.notFound("There is no playlist with this id"))
 
       await playlist.addSong(await Song.findByPk(song_id))
 
@@ -231,7 +231,7 @@ class PlaylistController {
     catch (err) {
       nodeLogger.error(err)
       const error = errorDetection(err)
-      error ? res.json(error) : res.json(ApiError.internal("Couldn't update album"))
+      error ? res.status(error.code).json(error.message) : res.status(500).json(ApiError.internal("Couldn't update album"))
     }
   }
 
@@ -245,7 +245,7 @@ class PlaylistController {
     } catch (err) {
       nodeLogger.error(err)
       const error = errorDetection(err)
-      error ? res.json(error) : res.json(ApiError.internal("Couldn't update album"))
+      error ? res.status(error.code).json(error.message) : res.status(500).json(ApiError.internal("Couldn't update album"))
     }
   }
 }

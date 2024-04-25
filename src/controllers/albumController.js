@@ -23,7 +23,7 @@ class AlbumController {
     } catch (err) {
       nodeLogger.error(err)
       const error = errorDetection(err)
-      error ? res.json(error) : res.json(ApiError.internal("Couldn't get albums"))
+      error ? res.status(error.code).json(error.message) : res.status(500).json(ApiError.internal("Couldn't get albums"))
     }
   }
 
@@ -40,7 +40,7 @@ class AlbumController {
       })
 
       if (!album) {
-        return res.json(ApiError.notFound("There is no album with this id"))
+        return res.status(404).json(ApiError.notFound("There is no album with this id"))
       }
 
       const data = {
@@ -51,7 +51,7 @@ class AlbumController {
     } catch (err) {
       nodeLogger.error(err)
       const error = errorDetection(err)
-      error ? res.json(error) : res.json(ApiError.internal("Couldn't get album"))
+      error ? res.status(error.code).json(error.message) : res.status(500).json(ApiError.internal("Couldn't get album"))
     }
   }
 
@@ -59,7 +59,7 @@ class AlbumController {
     try {
       const inValidFields = incorrectFields(req.body, ["name", "img", "songs"])
       if (inValidFields.length) {
-        return res.json(ApiError.badRequest(`Field's ${inValidFields.join(", ")} is not allowed`))
+        return res.status(400).json(ApiError.badRequest(`Field's ${inValidFields.join(", ")} is not allowed`))
       }
 
       const { name, img, songs } = req.body
@@ -90,7 +90,7 @@ class AlbumController {
     } catch (err) {
       nodeLogger.error(err)
       const error = errorDetection(err)
-      error ? res.json(error) : res.json(ApiError.internal("Couldn't create album"))
+      error ? res.status(error.code).json(error.message) : res.status(500).json(ApiError.internal("Couldn't create album"))
     }
   }
 
@@ -98,7 +98,7 @@ class AlbumController {
     try {
       const inValidFields = incorrectFields(req.body, ["name", "img"])
       if (inValidFields.length) {
-        return res.json(ApiError.badRequest(`Field's ${inValidFields.join(", ")} is not allowed`))
+        return res.status(400).json(ApiError.badRequest(`Field's ${inValidFields.join(", ")} is not allowed`))
       }
 
       const { id } = req.params
@@ -122,7 +122,7 @@ class AlbumController {
     } catch (err) {
       nodeLogger.error(err)
       const error = errorDetection(err)
-      error ? res.json(error) : res.json(ApiError.internal("Couldn't update album"))
+      error ? res.status(error.code).json(error.message) : res.status(500).json(ApiError.internal("Couldn't update album"))
     }
   }
 
@@ -134,14 +134,14 @@ class AlbumController {
       const isDeleted = await Album.destroy({ where: { id } })
 
       if (!isDeleted) {
-        return res.json(ApiError.notFound("There is no album with this id"))
+        return res.status(404).json(ApiError.notFound("There is no album with this id"))
       }
 
       return res.json({ data: {} })
     } catch (err) {
       nodeLogger.error(err)
       const error = errorDetection(err)
-      error ? res.json(error) : res.json(ApiError.internal("Couldn't delete album"))
+      error ? res.status(error.code).json(error.message) : res.status(500).json(ApiError.internal("Couldn't delete album"))
     }
   }
 
@@ -149,7 +149,7 @@ class AlbumController {
     try {
       const inValidFields = incorrectFields(req.body, ["song_id"])
       if (inValidFields.length) {
-        return res.json(ApiError.badRequest(`Field's ${inValidFields.join(", ")} is not allowed`))
+        return res.status(400).json(ApiError.badRequest(`Field's ${inValidFields.join(", ")} is not allowed`))
       }
 
       const { id } = req.params
@@ -173,7 +173,7 @@ class AlbumController {
     } catch (err) {
       nodeLogger.error(err)
       const error = errorDetection(err)
-      error ? res.json(error) : res.json(ApiError.internal("Couldn't update album"))
+      error ? res.status(error.code).json(error.message) : res.status(500).json(ApiError.internal("Couldn't update album"))
     }
   }
 
@@ -187,7 +187,7 @@ class AlbumController {
     } catch (err) {
       nodeLogger.error(err)
       const error = errorDetection(err)
-      error ? res.json(error) : res.json(ApiError.internal("Couldn't update album"))
+      error ? res.status(error.code).json(error.message) : res.status(500).json(ApiError.internal("Couldn't update album"))
     }
   }
 }

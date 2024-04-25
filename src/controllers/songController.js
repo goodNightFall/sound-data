@@ -21,7 +21,7 @@ class SongController {
     } catch (err) {
       nodeLogger.error(err)
       const error = errorDetection(err)
-      error ? res.json(error) : res.json(ApiError.internal("Couldn't get songs"))
+      error ? res.status(error.code).json(error.message) : res.status(500).json(ApiError.internal("Couldn't get songs"))
     }
   }
 
@@ -35,7 +35,7 @@ class SongController {
       })
 
       if (!song) {
-        return res.json(ApiError.notFound("There is no song with this id"))
+        return res.status(404).json(ApiError.notFound("There is no song with this id"))
       }
 
       const data = {
@@ -46,7 +46,7 @@ class SongController {
     } catch (err) {
       nodeLogger.error(err)
       const error = errorDetection(err)
-      error ? res.json(error) : res.json(ApiError.internal("Couldn't get song"))
+      error ? res.status(error.code).json(error.message) : res.status(500).json(ApiError.internal("Couldn't get song"))
     }
   }
 
@@ -54,20 +54,20 @@ class SongController {
     try {
       const inValidFields = incorrectFields(req.body, ["album_id", "author_id", "genre_id", "name", "audio", "img"])
       if (inValidFields.length) {
-        return res.json(ApiError.badRequest(`Field's ${inValidFields.join(", ")} is not allowed`))
+        return res.status(400).json(ApiError.badRequest(`Field's ${inValidFields.join(", ")} is not allowed`))
       }
 
       const { id } = req.params
       const { album_id, author_id, genre_id, name, audio, img } = req.body
 
       if (album_id) {
-        await Album.findByPk(album_id) || res.json(ApiError.badRequest("There is no album with this id"))
+        await Album.findByPk(album_id) || res.status(400).json(ApiError.badRequest("There is no album with this id"))
       }
 
       const genre = await Genre.findByPk(genre_id)
       const author = await Author.findByPk(author_id)
       if (!genre || !author) {
-        return res.json(ApiError.badRequest("There is no genre or author with this id"))
+        return res.status(400).json(ApiError.badRequest("There is no genre or author with this id"))
       }
 
       await Song.update({ album_id, author_id, genre_id, name, audio, img }, { where: { id } })
@@ -85,7 +85,7 @@ class SongController {
     } catch (err) {
       nodeLogger.error(err)
       const error = errorDetection(err)
-      error ? res.json(error) : res.json(ApiError.internal("Couldn't update song"))
+      error ? res.status(error.code).json(error.message) : res.status(500).json(ApiError.internal("Couldn't update song"))
     }
   }
 
@@ -95,14 +95,14 @@ class SongController {
       const isDeleted = await Song.destroy({ where: { id } })
 
       if (!isDeleted) {
-        return res.json(ApiError.notFound("There is no song with this id"))
+        return res.status(404).json(ApiError.notFound("There is no song with this id"))
       }
 
       return res.json({ data: {} })
     } catch (err) {
       nodeLogger.error(err)
       const error = errorDetection(err)
-      error ? res.json(error) : res.json(ApiError.internal("Couldn't delete song"))
+      error ? res.status(error.code).json(error.message) : res.status(500).json(ApiError.internal("Couldn't delete song"))
     }
   }
 
@@ -110,7 +110,7 @@ class SongController {
     try {
       const inValidFields = incorrectFields(req.body, ["author_id", "genre_id"])
       if (inValidFields.length) {
-        return res.json(ApiError.badRequest(`Field's ${inValidFields.join(", ")} is not allowed`))
+        return res.status(400).json(ApiError.badRequest(`Field's ${inValidFields.join(", ")} is not allowed`))
       }
 
       const filter = req.body
@@ -128,7 +128,7 @@ class SongController {
     } catch (err) {
       nodeLogger.error(err)
       const error = errorDetection(err)
-      error ? res.json(error) : res.json(ApiError.internal("Couldn't find song"))
+      error ? res.status(error.code).json(error.message) : res.status(500).json(ApiError.internal("Couldn't find song"))
     }
   }
 
@@ -142,7 +142,7 @@ class SongController {
       const { album_id, author_id, genre_id, name, audio, img } = req.body
 
       if (album_id) {
-        await Album.findByPk(album_id) || res.json(ApiError.badRequest("There is no album with this id"))
+        await Album.findByPk(album_id) || res.status(400).json(ApiError.badRequest("There is no album with this id"))
       }
 
       const genre = await Genre.findByPk(genre_id)
@@ -169,7 +169,7 @@ class SongController {
     } catch (err) {
       nodeLogger.error(err)
       const error = errorDetection(err)
-      error ? res.json(error) : res.json(ApiError.internal("Couldn't create song"))
+      error ? res.status(error.code).json(error.message) : res.status(500).json(ApiError.internal("Couldn't create song"))
     }
   }
 }

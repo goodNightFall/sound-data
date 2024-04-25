@@ -17,7 +17,7 @@ class AuthorController {
     } catch (err) {
       nodeLogger.error(err)
       const error = errorDetection(err)
-      error ? res.json(error) : res.json(ApiError.internal("Couldn't get authors"))
+      error ? res.status(error.code).json(error.message) : res.status(500).json(ApiError.internal("Couldn't get authors"))
     }
   }
 
@@ -25,7 +25,7 @@ class AuthorController {
     try {
       const inValidFields = incorrectFields(req.body, ["name"])
       if (inValidFields.length) {
-        return res.json(ApiError.badRequest(`Field's ${inValidFields.join(", ")} is not allowed`))
+        return res.status(400).json(ApiError.badRequest(`Field's ${inValidFields.join(", ")} is not allowed`))
       }
 
       const { name } = req.body
@@ -42,7 +42,7 @@ class AuthorController {
     } catch (err) {
       nodeLogger.error(err)
       const error = errorDetection(err)
-      error ? res.json(error) : res.json(ApiError.internal("Couldn't create author"))
+      error ? res.status(error.code).json(error.message) : res.status(500).json(ApiError.internal("Couldn't create author"))
     }
   }
 
@@ -50,7 +50,7 @@ class AuthorController {
     try {
       const inValidFields = incorrectFields(req.body, ["name"])
       if (inValidFields.length) {
-        return res.json(ApiError.badRequest(`Field's ${inValidFields.join(", ")} is not allowed`))
+        return res.status(400).json(ApiError.badRequest(`Field's ${inValidFields.join(", ")} is not allowed`))
       }
 
       const { id } = req.params
@@ -67,7 +67,7 @@ class AuthorController {
     } catch (err) {
       nodeLogger.error(err)
       const error = errorDetection(err)
-      error ? res.json(error) : res.json(ApiError.internal("Couldn't update author"))
+      error ? res.status(error.code).json(error.message) : res.status(500).json(ApiError.internal("Couldn't update author"))
     }
   }
 
@@ -77,14 +77,14 @@ class AuthorController {
       const isDeleted = await Author.destroy({ where: { id } })
 
       if (!isDeleted) {
-        return res.json(ApiError.notFound("There is no author with this id"))
+        return res.status(404).json(ApiError.notFound("There is no author with this id"))
       }
 
       return res.json({ data: {} })
     } catch (err) {
       nodeLogger.error(err)
       const error = errorDetection(err)
-      error ? res.json(error) : res.json(ApiError.internal("Couldn't delete author"))
+      error ? res.status(error.code).json(error.message) : res.status(500).json(ApiError.internal("Couldn't delete author"))
     }
   }
 }

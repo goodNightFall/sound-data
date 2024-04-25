@@ -17,7 +17,7 @@ class GenreController {
     } catch (err) {
       nodeLogger.error(err)
       const error = errorDetection(err)
-      error ? res.json(error) : res.json(ApiError.internal("Couldn't get genres"))
+      error ? res.status(error.code).json(error.message) : res.status(500).json(ApiError.internal("Couldn't get genres"))
     }
   }
 
@@ -25,7 +25,7 @@ class GenreController {
     try {
       const inValidFields = incorrectFields(req.body, ["name"])
       if (inValidFields.length) {
-        return res.json(ApiError.badRequest(`Field's ${inValidFields.join(", ")} is not allowed`))
+        return res.status(400).json(ApiError.badRequest(`Field's ${inValidFields.join(", ")} is not allowed`))
       }
 
       const { name } = req.body
@@ -42,7 +42,7 @@ class GenreController {
     } catch (err) {
       nodeLogger.error(err)
       const error = errorDetection(err)
-      error ? res.json(error) : res.json(ApiError.internal("Couldn't create genre"))
+      error ? res.status(error.code).json(error.message) : res.status(500).json(ApiError.internal("Couldn't create genre"))
     }
   }
 
@@ -50,7 +50,7 @@ class GenreController {
     try {
       const inValidFields = incorrectFields(req.body, ["name"])
       if (inValidFields.length) {
-        return res.json(ApiError.badRequest(`Field's ${inValidFields.join(", ")} is not allowed`))
+        return res.status(400).json(ApiError.badRequest(`Field's ${inValidFields.join(", ")} is not allowed`))
       }
 
       const { id } = req.params
@@ -70,7 +70,7 @@ class GenreController {
     } catch (err) {
       nodeLogger.error(err)
       const error = errorDetection(err)
-      error ? res.json(error) : res.json(ApiError.internal("Couldn't update genre"))
+      error ? res.status(error.code).json(error.message) : res.status(500).json(ApiError.internal("Couldn't update genre"))
     }
   }
 
@@ -80,14 +80,14 @@ class GenreController {
       const isDeleted = await Genre.destroy({ where: { id } })
 
       if (!isDeleted) {
-        return res.json(ApiError.notFound("There is no genre with this id"))
+        return res.status(404).json(ApiError.notFound("There is no genre with this id"))
       }
 
       return res.json({ data: {} })
     } catch (err) {
       nodeLogger.error(err)
       const error = errorDetection(err)
-      error ? res.json(error) : res.json(ApiError.internal("Couldn't delete genre"))
+      error ? res.status(error.code).json(error.message) : res.status(500).json(ApiError.internal("Couldn't delete genre"))
     }
   }
 }
