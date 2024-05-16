@@ -1,4 +1,5 @@
 const { Sequelize } = require("sequelize")
+const { sequelizeLogger } = require("./logger")
 
 module.exports = new Sequelize(
   process.env.DB_NAME,
@@ -8,5 +9,6 @@ module.exports = new Sequelize(
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
     dialect: "postgres",
+    logging: (msg) => sequelizeLogger.debug(msg),
   }
 )
